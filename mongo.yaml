@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongo
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mongo
+    spec:
+      serviceAccountName: workshopsa
+      volumes:
+      - name: mongo-volume
+        persistentVolumeClaim:
+          claimName: mongo-claim
+      containers:
+      - image: mongo:4.4
+        name: mongo
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongo-volume
+        resources: {}
+        ports:
+        - name: mongo-port
+          containerPort: 27017
+          protocol: TCP
+status: {}

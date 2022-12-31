@@ -1,0 +1,28 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:4.4
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+  backendserver:
+    ports:
+           - "8000:8000"
+    links:
+           - "mongo"
+    depends_on:
+           - "mongo"
+    restart: always
+    image: ahmedkanoun/java-project:latest
+  frontend:
+    image: ahmedkanoun/angular-project:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - "backendserver"
+    links:
+      - "backendserver"
+volumes:
+  mongodb_data:
+    external: true
